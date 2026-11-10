@@ -1,0 +1,2 @@
+"""ABBIS-Lite competition prototype."""
+

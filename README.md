@@ -10,15 +10,26 @@ This prototype uses the organisers' synthetic Kenya-modelled starter dataset, wi
 
 ## What we built
 
-- What works now: being built during the official 24-hour window; the first slice will cover data quality, expiry-aware stock, exact-group redistribution suggestions, and human review.
-- What is mocked or not finished: no live blood-service integration, dispatch, clinical authorization, multi-user authentication, or synchronization between devices.
+- What works now: a repeatable profile and cleaning pipeline; unit-level expiry-aware stock filtering; exact component and blood-group source matching; short-horizon demand estimates with a rolling comparison against a 7-day baseline; FEFO-ranked suggestions with route time and reasons; and a local Accept / Change / Reject review log.
+- What is mocked or not finished: no live blood-service integration, dispatch, clinical authorization, multi-user authentication, or synchronization between devices. The audit is a local demo log, not authenticated or tamper-proof.
 
 Demo video (3 minutes or less): pending
 Live demo: pending · Test log-in: not applicable to this local prototype
 
 ## How to run it
 
-Setup and launch instructions will be completed with the working slice.
+From the repository root, using Python 3.10 or newer:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+python -m scripts.prepare_data
+python -m scripts.evaluate_forecast
+streamlit run app.py
+```
+
+The last command prints a local URL. The default review scenario is an A+ red-cell shortage at HSP-018. Review choices are stored in a local SQLite file under `data/local/` and are not pushed or synchronized.
 
 ## Architecture
 
@@ -26,7 +37,7 @@ See [the architecture diagram](docs/architecture.md). The workflow reads the syn
 
 ## AI and data
 
-- What the AI or data feature does: estimate short-horizon demand from recent request history, then identify eligible exact-group units that can be considered for redistribution.
+- What the AI or data feature does: estimate seven-day demand from the trailing 28-day mean when that method beats the simple baseline on the supplied rolling backtest, then identify eligible exact-group units that can be considered for redistribution.
 - Baseline we compared against: a trailing 7-day mean demand estimate.
 - Result: see [the rolling backtest](reports/forecast_backtest.md); the comparison uses the synthetic request history and a 7-day forecast horizon.
 - How a user sees the reason for a recommendation: eligibility checks, source surplus, recipient forecast, route time, and expiry date are shown.
@@ -59,6 +70,7 @@ OpenAI Codex was used during the build window for data profiling, code drafting,
 
 - The inputs are a synthetic year ending 31 October 2026; they are not live stock feeds.
 - Exact blood-group matching is the only matching mode. Unknown groups and unconfirmed movements are excluded from unit suggestions.
+- The starter dataset has no separate quarantine field; the prototype permits only the explicit `in_stock` status and requires an explicit non-reactive source screen.
 - The recommendation is decision support, not authorization to move or transfuse blood.
 - The local audit log records the name entered by the reviewer; it is not authenticated identity or a tamper-proof audit service.
 - Add a real two-role authorization model, cross-device offline sync, and expert review before any operational use.
