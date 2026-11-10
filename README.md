@@ -66,6 +66,8 @@ OpenAI Codex was used during the build window for data profiling, code drafting,
 | Tusiime Betty | Frontend | Uganda | TBD |
 | Kisembo Stephen | AI/data, frontend |  | TBD |
 
+See [team contribution and commit handoff](docs/team_contributions.md) for the current authorship record and contribution workflow.
+
 ## Known limits and next steps
 
 - The inputs are a synthetic year ending 31 October 2026; they are not live stock feeds.
