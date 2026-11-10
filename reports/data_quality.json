@@ -1,0 +1,277 @@
+{
+  "as_of_date": "2026-10-31",
+  "table_profiles": {
+    "daily_stock": {
+      "rows": 185785,
+      "columns": [
+        "date",
+        "facility_id",
+        "component",
+        "blood_group",
+        "units_in_stock_end_of_day"
+      ],
+      "exact_duplicate_rows": 0,
+      "missing_by_column": {}
+    },
+    "donations": {
+      "rows": 47363,
+      "columns": [
+        "donation_id",
+        "donor_id",
+        "drive_id",
+        "collection_date",
+        "collecting_site_id",
+        "outcome",
+        "deferral_reason",
+        "volume_ml",
+        "screening_result",
+        "tti_marker",
+        "tested_date"
+      ],
+      "exact_duplicate_rows": 0,
+      "missing_by_column": {
+        "deferral_reason": 42265,
+        "volume_ml": 5098,
+        "screening_result": 5098,
+        "tti_marker": 44172,
+        "tested_date": 5098
+      },
+      "primary_key_blank": 0,
+      "primary_key_duplicates": 0
+    },
+    "donors": {
+      "rows": 43363,
+      "columns": [
+        "donor_id",
+        "sex",
+        "birth_date",
+        "blood_group",
+        "home_county",
+        "donor_category",
+        "registration_date",
+        "registration_site_id",
+        "preferred_channel",
+        "consent_to_contact",
+        "phone_last4"
+      ],
+      "exact_duplicate_rows": 0,
+      "missing_by_column": {
+        "blood_group": 506
+      },
+      "primary_key_blank": 0,
+      "primary_key_duplicates": 0
+    },
+    "drives": {
+      "rows": 1091,
+      "columns": [
+        "drive_id",
+        "date",
+        "collecting_site_id",
+        "county",
+        "venue_type",
+        "registered_donors",
+        "donations_collected",
+        "donors_deferred"
+      ],
+      "exact_duplicate_rows": 0,
+      "missing_by_column": {},
+      "primary_key_blank": 0,
+      "primary_key_duplicates": 0
+    },
+    "facilities": {
+      "rows": 47,
+      "columns": [
+        "facility_id",
+        "name",
+        "facility_type",
+        "county",
+        "lat",
+        "lon",
+        "keph_level",
+        "beds",
+        "grid_reliability",
+        "connectivity",
+        "supply_centre_id",
+        "makes_platelets",
+        "separates_components",
+        "has_blood_fridge_backup_power",
+        "routine_deliveries_per_week"
+      ],
+      "exact_duplicate_rows": 0,
+      "missing_by_column": {
+        "keph_level": 15,
+        "supply_centre_id": 6,
+        "routine_deliveries_per_week": 15
+      },
+      "primary_key_blank": 0,
+      "primary_key_duplicates": 0
+    },
+    "power_outages": {
+      "rows": 2609,
+      "columns": [
+        "outage_id",
+        "facility_id",
+        "start_time",
+        "end_time",
+        "duration_hours",
+        "backup_power_engaged"
+      ],
+      "exact_duplicate_rows": 0,
+      "missing_by_column": {},
+      "primary_key_blank": 0,
+      "primary_key_duplicates": 0
+    },
+    "requests": {
+      "rows": 17430,
+      "columns": [
+        "request_id",
+        "facility_id",
+        "facility_name_raw",
+        "requested_at",
+        "clinical_indication",
+        "patient_sex",
+        "patient_age_band",
+        "patient_blood_group",
+        "component_requested",
+        "units_requested",
+        "urgency",
+        "units_issued",
+        "units_issued_group_substituted",
+        "units_from_local_stock",
+        "emergency_supplied_from_id",
+        "last_unit_available_at",
+        "outcome"
+      ],
+      "exact_duplicate_rows": 0,
+      "missing_by_column": {
+        "emergency_supplied_from_id": 14760,
+        "last_unit_available_at": 1986
+      },
+      "primary_key_blank": 0,
+      "primary_key_duplicates": 0
+    },
+    "routes": {
+      "rows": 2162,
+      "columns": [
+        "from_facility_id",
+        "to_facility_id",
+        "road_km",
+        "typical_travel_hours",
+        "road_quality"
+      ],
+      "exact_duplicate_rows": 0,
+      "missing_by_column": {}
+    },
+    "temperature_logs": {
+      "rows": 399280,
+      "columns": [
+        "facility_id",
+        "recorded_at",
+        "temp_c"
+      ],
+      "exact_duplicate_rows": 0,
+      "missing_by_column": {}
+    },
+    "transfers": {
+      "rows": 35181,
+      "columns": [
+        "transfer_id",
+        "unit_id",
+        "from_facility_id",
+        "to_facility_id",
+        "transfer_type",
+        "request_id",
+        "dispatched_at",
+        "received_at",
+        "transport_mode",
+        "coolbox_max_temp_c"
+      ],
+      "exact_duplicate_rows": 0,
+      "missing_by_column": {
+        "request_id": 29851,
+        "received_at": 1046
+      },
+      "primary_key_blank": 0,
+      "primary_key_duplicates": 0
+    },
+    "units": {
+      "rows": 49426,
+      "columns": [
+        "unit_id",
+        "donation_id",
+        "component",
+        "blood_group",
+        "collection_date",
+        "expiry_date",
+        "processed_at_id",
+        "current_facility_id",
+        "status",
+        "status_date",
+        "temp_excursion_exposed",
+        "issued_request_id",
+        "opening_stock"
+      ],
+      "exact_duplicate_rows": 0,
+      "missing_by_column": {
+        "status_date": 8666,
+        "issued_request_id": 19776
+      },
+      "primary_key_blank": 0,
+      "primary_key_duplicates": 0
+    }
+  },
+  "quality_findings": {
+    "donor_duplicate_signature_pairs": 452,
+    "donor_rows_in_duplicate_signatures": 904,
+    "donors_missing_blood_group": 506,
+    "request_facility_name_exact_mismatches": 1852,
+    "request_facility_name_mismatches_after_case_space_normalization": 710,
+    "requests_with_unknown_group_and_emergency_urgency": 442,
+    "emergency_requests": 8768,
+    "transfers_missing_receipt_time": 1046,
+    "temperature_sentinel_glitches_observed": 55,
+    "temperature_sentinel_glitches_claimed_in_dataset_readme": 60,
+    "temperature_valid_readings_outside_documented_2_to_6_c_range": 4607,
+    "temperature_rows_observed": 399280,
+    "temperature_rows_expected_for_full_year": 411720,
+    "temperature_rows_missing_from_full_year_grid": 12440,
+    "collected_donation_gaps_below_3_or_4_calendar_months": 98,
+    "donation_rows_total": 47363,
+    "donation_rows_inside_dataset_year": 45699,
+    "donation_rows_before_dataset_year": 1664,
+    "units_in_stock_at_snapshot": 8666,
+    "eligible_by_status_and_expiry_before_other_safety_flags": 8666,
+    "in_stock_units_with_temperature_exposure_flag": 111,
+    "in_stock_units_linked_to_reactive_screening": 0,
+    "coolbox_readings_above_10_c": 0,
+    "last_snapshot_stock_groups": 509,
+    "last_snapshot_stock_group_reconciliations_exact": 509,
+    "last_snapshot_absolute_unit_difference": 0,
+    "route_rows": 2162,
+    "route_pairs_unique": 2162,
+    "units_with_quarantine_status": 0,
+    "unit_status_values": [
+      "discarded_temperature",
+      "expired",
+      "in_stock",
+      "transfused"
+    ],
+    "valid_blood_groups_in_unit_table": true
+  },
+  "derived_inventory": {
+    "eligible_units": 8531,
+    "excluded_in_stock_units": 135,
+    "in_stock_latest_moves_unconfirmed": 27,
+    "in_stock_location_conflicts": 0,
+    "in_stock_units_with_transfer_excursion": 0,
+    "policy": [
+      "only status=in_stock is considered",
+      "source donation must be explicitly non_reactive",
+      "expiry date must be on or after the 2026-10-31 end-of-day snapshot date",
+      "exclude unit-level temperature exposure and any transfer cool-box excursion above 10 C",
+      "exclude a latest transfer without receipt confirmation and confirmed transfer/location conflicts",
+      "require an exact, known blood group; do not substitute",
+      "select units in earliest-expiry-first order"
+    ]
+  }
+}

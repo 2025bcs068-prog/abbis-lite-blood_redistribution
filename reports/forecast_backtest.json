@@ -1,0 +1,24 @@
+{
+  "data": "synthetic starter dataset, requests.csv",
+  "target": "units_requested by facility, known patient blood group, and component",
+  "unknown_group_requests_excluded": true,
+  "backtest": "rolling origin, non-overlapping 7-day horizons, 28 days of prior history",
+  "first_origin": "2026-01-01",
+  "last_origin": "2026-10-24",
+  "origins": 43,
+  "facility_group_component_series": 420,
+  "request_rows_in_scope": 16988,
+  "held_out_units_total": 27602,
+  "baseline": {
+    "name": "trailing 7-day mean",
+    "wape": 0.8522933120788349,
+    "mae_units_per_series_horizon": 1.3026024363233666
+  },
+  "model": {
+    "name": "trailing 28-day mean",
+    "wape": 0.723000144917035,
+    "mae_units_per_series_horizon": 1.10499723145072
+  },
+  "relative_wape_reduction": 0.1517003188097768,
+  "uncertainty_note": "WAPE is a broad error measure on synthetic held-out history, not a clinical confidence interval."
+}
