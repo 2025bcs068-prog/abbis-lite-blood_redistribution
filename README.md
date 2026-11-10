@@ -58,13 +58,13 @@ OpenAI Codex was used during the build window for data profiling, code drafting,
 
 ## Team
 
-| Name | Role | Country | Presenting Friday (in person / online) |
-|------|------|---------|-----------------------------------------|
-| Biyimbwa Elijah Simwogerere | Team lead, backend, architecture | Uganda | TBD |
-| Kissa Keith Ndiema | Backend, AI/data | Uganda | TBD |
-| Okori Sadrach | AI/data | Uganda | TBD |
-| Tusiime Betty | Frontend | Uganda | TBD |
-| Kisembo Stephen | AI/data, frontend |  | TBD |
+| Name | Role | Country |
+|------|------|---------|
+| Biyimbwa Elijah Simwogerere | Team lead, backend, architecture | Uganda |
+| Kissa Keith Ndiema | Backend, AI/data | Uganda |
+| Okori Sadrach | AI/data | Uganda |
+| Tusiime Betty | Frontend | Uganda |
+| Kisembo Stephen | AI/data, frontend | Uganda |
 
 See [team contribution and commit handoff](docs/team_contributions.md) for the current authorship record and contribution workflow.
 
