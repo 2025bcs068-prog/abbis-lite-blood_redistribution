@@ -35,6 +35,7 @@ Dataset cut-off: 2026-10-31 EAT. These are synthetic records, not operational fi
 - The units table status values are `discarded_temperature, expired, in_stock, transfused`. It has no explicit quarantine status or field, so the pipeline fails closed: only an explicit `in_stock` status can pass; any other or future status is excluded.
 - 111 in-stock units are marked temperature-exposed. 0 in-stock units link to reactive screening in this data. 0 transfers have a recorded cool-box maximum above 10 C.
 - Of 2,162 route records, 2,162 origin/destination pairs are unique.
+- Referential integrity checks found 0 dangling IDs across 20 checked joins. 0 requests issue more units than requested; 0 daily-stock rows are negative; 0 units expire before collection.
 - After all filters, 8,531 units are eligible for a suggestion and 135 in-stock units are excluded. See `data/processed/units_eligibility.csv` for row-level reasons.
 
 ## Cleaning decisions

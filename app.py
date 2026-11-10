@@ -34,6 +34,7 @@ facility_labels = {
 
 st.title("ABBIS-Lite · Blood redistribution review")
 st.caption("Terumo BCT Africa Hackathon 2026 · Synthetic data snapshot through 31 October 2026")
+st.warning("Historical demonstration only: the stock snapshot ends on 31 October 2026. Reconcile live stock and expiry before any real movement.")
 
 eligible_count = int(units["eligible_for_redistribution"].astype(str).str.lower().eq("true").sum())
 unsafe_stock = int(

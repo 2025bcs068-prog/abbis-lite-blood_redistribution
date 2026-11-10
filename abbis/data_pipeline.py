@@ -64,6 +64,9 @@ def _flag_report() -> dict:
     transfers = _read("transfers", parse_dates=["dispatched_at", "received_at"])
     daily_stock = _read("daily_stock", parse_dates=["date"])
     temperature = _read("temperature_logs", parse_dates=["recorded_at"])
+    drives = _read("drives")
+    routes = _read("routes")
+    power_outages = _read("power_outages")
 
     duplicate_signature = donors.groupby(
         ["birth_date", "sex", "home_county", "phone_last4"], dropna=False
@@ -129,6 +132,44 @@ def _flag_report() -> dict:
     reactive_stock = int(
         ((units["status"] == "in_stock") & (units["source_screening_result"] == "reactive")).sum()
     )
+    facility_ids = set(facilities["facility_id"])
+    donor_ids = set(donors["donor_id"])
+    drive_ids = set(drives["drive_id"])
+    donation_ids = set(donations["donation_id"])
+    unit_ids = set(units["unit_id"])
+    request_ids = set(requests["request_id"])
+    reference_relations = [
+        ("donors.registration_site_id->facilities", donors, "registration_site_id", facility_ids),
+        ("drives.collecting_site_id->facilities", drives, "collecting_site_id", facility_ids),
+        ("donations.donor_id->donors", donations, "donor_id", donor_ids),
+        ("donations.drive_id->drives", donations, "drive_id", drive_ids),
+        ("donations.collecting_site_id->facilities", donations, "collecting_site_id", facility_ids),
+        ("units.donation_id->donations", units, "donation_id", donation_ids),
+        ("units.processed_at_id->facilities", units, "processed_at_id", facility_ids),
+        ("units.current_facility_id->facilities", units, "current_facility_id", facility_ids),
+        ("units.issued_request_id->requests", units, "issued_request_id", request_ids),
+        ("transfers.unit_id->units", transfers, "unit_id", unit_ids),
+        ("transfers.request_id->requests", transfers, "request_id", request_ids),
+        ("transfers.from_facility_id->facilities", transfers, "from_facility_id", facility_ids),
+        ("transfers.to_facility_id->facilities", transfers, "to_facility_id", facility_ids),
+        ("requests.facility_id->facilities", requests, "facility_id", facility_ids),
+        ("requests.emergency_supplied_from_id->facilities", requests, "emergency_supplied_from_id", facility_ids),
+        ("daily_stock.facility_id->facilities", daily_stock, "facility_id", facility_ids),
+        ("power_outages.facility_id->facilities", power_outages, "facility_id", facility_ids),
+        ("temperature_logs.facility_id->facilities", temperature, "facility_id", facility_ids),
+        ("routes.from_facility_id->facilities", routes, "from_facility_id", facility_ids),
+        ("routes.to_facility_id->facilities", routes, "to_facility_id", facility_ids),
+    ]
+    dangling_references = {}
+    for label, frame, column, allowed in reference_relations:
+        values = frame[column].dropna().astype(str)
+        values = values[values.str.strip().ne("")]
+        dangling_references[label] = int((~values.isin(allowed)).sum())
+    issued = pd.to_numeric(requests["units_issued"], errors="coerce")
+    requested_units = pd.to_numeric(requests["units_requested"], errors="coerce")
+    stock_counts = pd.to_numeric(daily_stock["units_in_stock_end_of_day"], errors="coerce")
+    unit_collection = pd.to_datetime(units["collection_date"], errors="coerce")
+    unit_expiry = pd.to_datetime(units["expiry_date"], errors="coerce")
 
     return {
         "as_of_date": AS_OF.date().isoformat(),
@@ -165,6 +206,10 @@ def _flag_report() -> dict:
             "units_with_quarantine_status": int(units["status"].astype(str).str.lower().str.contains("quarant", na=False).sum()),
             "unit_status_values": sorted(units["status"].dropna().astype(str).unique().tolist()),
             "valid_blood_groups_in_unit_table": bool(units["blood_group"].dropna().isin(BLOOD_GROUPS).all()),
+            "dangling_reference_rows": dangling_references,
+            "requests_issued_above_requested": int((issued > requested_units).sum()),
+            "negative_daily_stock_rows": int((stock_counts < 0).sum()),
+            "units_expiring_before_collection": int((unit_expiry < unit_collection).sum()),
         },
     }
 
@@ -340,6 +385,7 @@ Dataset cut-off: {report['as_of_date']} EAT. These are synthetic records, not op
 - The units table status values are `{', '.join(q['unit_status_values'])}`. It has no explicit quarantine status or field, so the pipeline fails closed: only an explicit `in_stock` status can pass; any other or future status is excluded.
 - {q['in_stock_units_with_temperature_exposure_flag']:,} in-stock units are marked temperature-exposed. {q['in_stock_units_linked_to_reactive_screening']:,} in-stock units link to reactive screening in this data. {q['coolbox_readings_above_10_c']:,} transfers have a recorded cool-box maximum above 10 C.
 - Of {q['route_rows']:,} route records, {q['route_pairs_unique']:,} origin/destination pairs are unique.
+- Referential integrity checks found {sum(q['dangling_reference_rows'].values()):,} dangling IDs across {len(q['dangling_reference_rows'])} checked joins. {q['requests_issued_above_requested']:,} requests issue more units than requested; {q['negative_daily_stock_rows']:,} daily-stock rows are negative; {q['units_expiring_before_collection']:,} units expire before collection.
 - After all filters, {d['eligible_units']:,} units are eligible for a suggestion and {d['excluded_in_stock_units']:,} in-stock units are excluded. See `data/processed/units_eligibility.csv` for row-level reasons.
 
 ## Cleaning decisions

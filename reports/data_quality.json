@@ -256,7 +256,32 @@
       "in_stock",
       "transfused"
     ],
-    "valid_blood_groups_in_unit_table": true
+    "valid_blood_groups_in_unit_table": true,
+    "dangling_reference_rows": {
+      "donors.registration_site_id->facilities": 0,
+      "drives.collecting_site_id->facilities": 0,
+      "donations.donor_id->donors": 0,
+      "donations.drive_id->drives": 0,
+      "donations.collecting_site_id->facilities": 0,
+      "units.donation_id->donations": 0,
+      "units.processed_at_id->facilities": 0,
+      "units.current_facility_id->facilities": 0,
+      "units.issued_request_id->requests": 0,
+      "transfers.unit_id->units": 0,
+      "transfers.request_id->requests": 0,
+      "transfers.from_facility_id->facilities": 0,
+      "transfers.to_facility_id->facilities": 0,
+      "requests.facility_id->facilities": 0,
+      "requests.emergency_supplied_from_id->facilities": 0,
+      "daily_stock.facility_id->facilities": 0,
+      "power_outages.facility_id->facilities": 0,
+      "temperature_logs.facility_id->facilities": 0,
+      "routes.from_facility_id->facilities": 0,
+      "routes.to_facility_id->facilities": 0
+    },
+    "requests_issued_above_requested": 0,
+    "negative_daily_stock_rows": 0,
+    "units_expiring_before_collection": 0
   },
   "derived_inventory": {
     "eligible_units": 8531,
